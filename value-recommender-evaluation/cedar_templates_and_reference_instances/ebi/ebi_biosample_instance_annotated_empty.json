@@ -1,0 +1,92 @@
+{
+  "@context": {
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "pav": "http://purl.org/pav/",
+    "schema": "http://schema.org/",
+    "oslc": "http://open-services.net/ns/core#",
+    "rdfs:label": {
+      "@type": "xsd:string"
+    },
+    "schema:isBasedOn": {
+      "@type": "@id"
+    },
+    "schema:name": {
+      "@type": "xsd:string"
+    },
+    "schema:description": {
+      "@type": "xsd:string"
+    },
+    "pav:createdOn": {
+      "@type": "xsd:dateTime"
+    },
+    "pav:createdBy": {
+      "@type": "@id"
+    },
+    "pav:lastUpdatedOn": {
+      "@type": "xsd:dateTime"
+    },
+    "oslc:modifiedBy": {
+      "@type": "@id"
+    },
+    "accession": "https://schema.metadatacenter.orgx/properties/43b0b51f-de72-4ab8-b66d-9ef001100ced",
+    "name": "https://schema.metadatacenter.orgx/properties/a57d0544-f2bd-44fe-87c2-2da88c4219a1",
+    "releaseDate": "https://schema.metadatacenter.orgx/properties/6aef1d7e-eb6f-404e-9e5b-7fa9cb965964",
+    "updateDate": "https://schema.metadatacenter.orgx/properties/d9ca3e6b-c2c9-49b6-a636-fd2f150d2716",
+    "organization": "https://schema.metadatacenter.orgx/properties/845cbfee-b9f2-4cee-80e1-c64aed0b2c2e",
+    "contact": "https://schema.metadatacenter.orgx/properties/b49eed96-e1f4-4277-85c4-60c42f40af7d",
+    "organism": "https://schema.metadatacenter.orgx/properties/eddc5a87-ff6b-4af3-876b-ca9bb1626af8",
+    "age": "https://schema.metadatacenter.orgx/properties/2aba3735-89b3-4180-8eba-b4583340c240",
+    "sex": "https://schema.metadatacenter.orgx/properties/c6b720bc-a48f-4335-a280-d06353014393",
+    "organismPart": "https://schema.metadatacenter.orgx/properties/954c9fc0-4993-45f9-9f10-930663db367f",
+    "cellLine": "https://schema.metadatacenter.orgx/properties/41f25ffb-a229-441c-8e78-4486cafd7b97",
+    "cellType": "https://schema.metadatacenter.orgx/properties/34cab374-f12f-4941-8319-204fe12b7a2e",
+    "diseaseState": "https://schema.metadatacenter.orgx/properties/a7c2d251-e8cc-4af0-ab28-6f0db5032a69",
+    "ethnicity": "https://schema.metadatacenter.orgx/properties/b15ddf52-4c8c-488e-a954-f2dc7486ec0f"
+  },
+  "accession": {
+    "@value": null
+  },
+  "name": {
+    "@value": null
+  },
+  "releaseDate": {
+    "@value": null
+  },
+  "updateDate": {
+    "@value": null
+  },
+  "organization": {
+    "@value": null
+  },
+  "contact": {
+    "@value": null
+  },
+  "organism": {
+    "@value": null
+  },
+  "age": {
+    "@value": null
+  },
+  "sex": {
+    "@type": "http://data.bioontology.org/ontologies/EFO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FPATO_0000047"
+  },
+  "organismPart": {
+    "@type": "http://data.bioontology.org/ontologies/EFO/classes/http%3A%2F%2Fwww.ebi.ac.uk%2Fefo%2FEFO_0000635"
+  },
+  "cellLine": {
+    "@type": "http://data.bioontology.org/ontologies/EFO/classes/http%3A%2F%2Fwww.ebi.ac.uk%2Fefo%2FEFO_0000322"
+  },
+  "cellType": {
+    "@type": "http://data.bioontology.org/ontologies/EFO/classes/http%3A%2F%2Fwww.ebi.ac.uk%2Fefo%2FEFO_0000324"
+  },
+  "diseaseState": {
+    "@type": "http://data.bioontology.org/ontologies/EFO/classes/http%3A%2F%2Fwww.ebi.ac.uk%2Fefo%2FEFO_0000408"
+  },
+  "ethnicity": {
+    "@type": "http://data.bioontology.org/ontologies/EFO/classes/http%3A%2F%2Fwww.ebi.ac.uk%2Fefo%2FEFO_0001799"
+  },
+  "schema:isBasedOn": "https://repo.metadatacenter.orgx/templates/6b6c76e6-1d9b-4096-9702-133e25ecd140",
+  "schema:name": "EBI BioSample metadata",
+  "schema:description": ""
+}

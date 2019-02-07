@@ -104,7 +104,8 @@ def has_minimum_relevant_attributes_count(sample, min_count=2):
 def main():
     if not os.path.exists(os.path.dirname(OUTPUT_FILE)):
         os.makedirs(os.path.dirname(OUTPUT_FILE))
-
+    print('Input file: ' + INPUT_FILE)
+    print('Processing NCBI samples...')
     # Read biosamples from XML file
     content = pulldom.parse(INPUT_FILE)
     processed_samples_count = 0
@@ -116,15 +117,14 @@ def main():
             if event == 'START_ELEMENT' and node.tagName == 'BioSample':
                 content.expandNode(node)
                 node_xml = node.toxml()
-
+                processed_samples_count = processed_samples_count + 1
+                if processed_samples_count % 5000 == 0:
+                        print('Processed samples: ' + str(processed_samples_count))
+                        print('Selected samples: ' + str(selected_samples_count))
                 if is_homo_sapiens_sample(node_xml):
                     if has_minimum_relevant_attributes_count(node_xml, arm_constants.NCBI_FILTER_MIN_RELEVANT_ATTS):
                         f.write('\n' + node.toxml())
                         selected_samples_count = selected_samples_count + 1
-                    processed_samples_count = processed_samples_count + 1
-                    if processed_samples_count % 1000 == 0:
-                        print('Processed samples: ' + str(processed_samples_count))
-                        print('Selected samples: ' + str(selected_samples_count))
 
         f.write("\n</BioSampleSet>\n")
     f.close()
