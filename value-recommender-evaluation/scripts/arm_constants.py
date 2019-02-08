@@ -9,7 +9,7 @@ class BIOSAMPLES_DB(Enum):
 
 BASE_PATH = "./"
 DATA_BASE_PATH = BASE_PATH + "data"
-OUTPUT_BASE_PATH = BASE_PATH + "tmp"
+OUTPUT_BASE_PATH = BASE_PATH + "workspace"
 
 ####################
 # DOWNLOAD SAMPLES #
@@ -27,7 +27,7 @@ EBI_DOWNLOAD_OUTPUT_FOLDER = OUTPUT_BASE_PATH + "/samples/ebi_samples/original"
 ##################
 
 # Input parameters for 'ncbi_biosamples_2_filter.py'
-NCBI_FILTER_INPUT_FILE = DATA_BASE_PATH + '/samples/ncbi_samples/original/2018-03-09-biosample_set.xml'
+NCBI_FILTER_INPUT_FILE = DATA_BASE_PATH + '/samples/ncbi_samples/original/2018-03-09-biosample_set.xml.gz'
 NCBI_FILTER_OUTPUT_FILE = OUTPUT_BASE_PATH + '/samples/ncbi_samples/filtered/biosample_result_filtered.xml'
 NCBI_FILTER_RELEVANT_ATTS = ['sex', 'tissue', 'disease', 'cell_type', 'cell type', 'cell_line', 'cell line', 'ethnicity']
 NCBI_FILTER_MIN_RELEVANT_ATTS = 3

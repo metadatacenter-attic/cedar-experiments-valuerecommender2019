@@ -1,3 +1,6 @@
+import time
+import sys
+
 def log_progress(count, block_size, total_size):
     global start_time
     if count == 0:

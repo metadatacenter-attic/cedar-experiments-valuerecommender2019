@@ -8,6 +8,7 @@ import xml.etree.ElementTree as ET
 import os
 import datasources_util
 import arm_constants
+import gzip
 
 INPUT_FILE = arm_constants.NCBI_FILTER_INPUT_FILE
 OUTPUT_FILE = arm_constants.NCBI_FILTER_OUTPUT_FILE
@@ -107,7 +108,7 @@ def main():
     print('Input file: ' + INPUT_FILE)
     print('Processing NCBI samples...')
     # Read biosamples from XML file
-    content = pulldom.parse(INPUT_FILE)
+    content = pulldom.parse(gzip.open(INPUT_FILE))
     processed_samples_count = 0
     selected_samples_count = 0
     with codecs.open(OUTPUT_FILE, 'w', 'utf-8') as f:

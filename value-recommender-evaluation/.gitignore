@@ -9,4 +9,5 @@ __pycache__/
 */.ipynb_checkpoints/*
 
 ### Custom ###
-tmp/
+output/
+workspace/
