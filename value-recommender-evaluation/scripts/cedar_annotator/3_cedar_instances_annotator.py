@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Utility to annotate CEDAR instances using the NCBO Annotator. It takes a CEDAR instances and returns them annotated
+# Utility to annotate CEDAR instances using ontology terms
 
 import json
 import os

@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 
 BASE_PATH = "./"
-OUTPUT_BASE_PATH = BASE_PATH + "workspace"
+DATA_BASE_PATH = BASE_PATH + "data"
+OUTPUT_BASE_PATH = BASE_PATH + "workspace/data"
 
 NCBI_INSTANCES_OUTPUT_BASE_PATH = OUTPUT_BASE_PATH + '/cedar_instances/ncbi_cedar_instances'
 EBI_INSTANCES_OUTPUT_BASE_PATH = OUTPUT_BASE_PATH + '/cedar_instances/ebi_cedar_instances'
@@ -25,18 +26,21 @@ VALUES_EXTRACTION_OUTPUT_FILE_PATH = OUTPUT_BASE_PATH + '/cedar_instances_annota
 ##############################################################
 
 VALUES_ANNOTATION_INPUT_VALUES_FILE_PATH = VALUES_EXTRACTION_OUTPUT_FILE_PATH
-# We have two lists of preferred ontologies to generate different annotations for each dataset
+# We have two lists of preferred ontologies to generate different annotations for each dataset. 
+# The goal is to demonstrate that our approach is able to take advantage of ontology mappings to 
+# bridge the gap caused by different URIs that refer to the same meaning.
 VALUES_ANNOTATION_PREFERRED_ONTOLOGIES_1 = ['EFO', 'DOID', 'OBI', 'CL', 'CLO', 'PATO', 'CHEBI', 'BFO', 'PR', 'CPT',
                                             'MEDDRA', 'UBERON', 'RXNORM', 'SNOMEDCT', 'FMA', 'LOINC', 'NDFRT', 'EDAM',
                                             'RCD', 'ICD10CM', 'SNMI', 'BTO', 'MESH', 'NCIT', 'OMIM']
 VALUES_ANNOTATION_PREFERRED_ONTOLOGIES_2 = ['OMIM', 'NCIT', 'MESH', 'BTO', 'SNMI', 'ICD10CM', 'RCD', 'EDAM', 'NDFRT',
                                             'LOINC', 'FMA', 'SNOMEDCT', 'RXNORM', 'UBERON', 'MEDDRA', 'CPT', 'PR',
                                             'BFO', 'CHEBI', 'PATO', 'CLO', 'CL', 'OBI', 'DOID', 'EFO'] # reversed list
-VALUES_ANNOTATION_OUTPUT_FILE_PATH_1 = BASE_PATH + '/cedar_instances_annotated/unique_values/unique_values_annotated_1.json'
-VALUES_ANNOTATION_OUTPUT_FILE_PATH_2 = BASE_PATH + '/cedar_instances_annotated/unique_values/unique_values_annotated_2.json'
-VALUES_ANNOTATION_MAPPINGS_FILE_PATH_1 = BASE_PATH + '/cedar_instances_annotated/unique_values/mappings_1.json'
-VALUES_ANNOTATION_MAPPINGS_FILE_PATH_2 = BASE_PATH + '/cedar_instances_annotated/unique_values/mappings_2.json'
-VALUES_ANNOTATION_BIOPORTAL_API_KEY = '<Your_BioPortal_API_key>'
+VALUES_ANNOTATION_OUTPUT_FILE_PATH_1 = OUTPUT_BASE_PATH + '/cedar_instances_annotated/unique_values/unique_values_annotated_1.json'
+VALUES_ANNOTATION_OUTPUT_FILE_PATH_2 = OUTPUT_BASE_PATH + '/cedar_instances_annotated/unique_values/unique_values_annotated_2.json'
+VALUES_ANNOTATION_MAPPINGS_FILE_PATH_1 = OUTPUT_BASE_PATH + '/cedar_instances_annotated/unique_values/mappings_1.json'
+VALUES_ANNOTATION_MAPPINGS_FILE_PATH_2 = OUTPUT_BASE_PATH + '/cedar_instances_annotated/unique_values/mappings_2.json'
+VALUES_ANNOTATION_OUTPUT_FILE_PATH_1_PRECOMPUTED = DATA_BASE_PATH + '/cedar_instances_annotated/unique_values/unique_values_annotated_1.json'
+VALUES_ANNOTATION_OUTPUT_FILE_PATH_2_PRECOMPUTED = DATA_BASE_PATH + '/cedar_instances_annotated/unique_values/unique_values_annotated_2.json'
 VALUES_ANNOTATION_VALUES_PER_ITERATION = 2000
 VALUES_ANNOTATION_USE_NORMALIZED_VALUES = False
 VALUES_ANNOTATION_NORMALIZED_VALUES_FILE_NAME = 'normalized_values.json'  # We assume that the file is stored in the current path
@@ -46,18 +50,14 @@ VALUES_ANNOTATION_LIMIT_TO_PREFERRED_ONTOLOGIES = False
 # ANNOTATION OF CEDAR INSTANCES (3_cedar_instances_annotator.py) #
 ##################################################################
 
-INSTANCES_ANNOTATION_INPUT_BASE_PATH = BASE_PATH + '/cedar_instances'
-# INSTANCES_ANNOTATION_INPUT_FOLDERS = [
-#     INSTANCES_ANNOTATION_INPUT_BASE_PATH + '/ncbi_cedar_instances/training',
-#     INSTANCES_ANNOTATION_INPUT_BASE_PATH + '/ncbi_cedar_instances/testing',
-#     INSTANCES_ANNOTATION_INPUT_BASE_PATH + '/ebi_cedar_instances/training',
-#     INSTANCES_ANNOTATION_INPUT_BASE_PATH + '/ebi_cedar_instances/testing'
-# ]
+INSTANCES_ANNOTATION_INPUT_BASE_PATH = OUTPUT_BASE_PATH + '/cedar_instances'
+INSTANCES_ANNOTATION_OUTPUT_BASE_PATH = OUTPUT_BASE_PATH + '/cedar_instances_annotated'
 INSTANCES_ANNOTATION_INPUT_FOLDERS = [
+    INSTANCES_ANNOTATION_INPUT_BASE_PATH + '/ncbi_cedar_instances/training',
+    INSTANCES_ANNOTATION_INPUT_BASE_PATH + '/ncbi_cedar_instances/testing',
     INSTANCES_ANNOTATION_INPUT_BASE_PATH + '/ebi_cedar_instances/training',
     INSTANCES_ANNOTATION_INPUT_BASE_PATH + '/ebi_cedar_instances/testing'
 ]
-INSTANCES_ANNOTATION_OUTPUT_BASE_PATH = BASE_PATH + '/cedar_instances_annotated/ebi_cedar_instances_ont2'
 INSTANCES_ANNOTATION_OUTPUT_SUFFIX = '_annotated'
 #INSTANCES_ANNOTATION_VALUES_ANNOTATED_FILE_PATH = VALUES_ANNOTATION_OUTPUT_FILE_PATH_1
 INSTANCES_ANNOTATION_VALUES_ANNOTATED_FILE_PATH = VALUES_ANNOTATION_OUTPUT_FILE_PATH_2

@@ -180,7 +180,7 @@ def main():
             os.makedirs(output_path)
 
         if not EXCLUDE_IDS or (EXCLUDE_IDS and (len(biosample.ids.intersection(excluded_ids))) == 0):
-            if (instance_number % 5000) == 0:
+            if (instance_number % 10000) == 0:
                 # print('Saving instance #' + str(instance_number) + ' to ' + output_path)
                 print('No. instances generated: ' + str(instance_number) + '({0:.0%})'.format(instance_number/len(biosamples_list)))
             arm_evaluation_util.save_to_folder(instance, instance_number, output_path, OUTPUT_BASE_FILE_NAME)
@@ -190,16 +190,16 @@ def main():
             excluded_samples_count = excluded_samples_count + 1
 
     # Save training ids
-    with open(OUTPUT_BASE_PATH + '/training_ids.txt', 'w') as output_file:
-        for training_id in training_ids:
-            output_file.write("%s\n" % training_id)
+#     with open(OUTPUT_BASE_PATH + '/training_ids.txt', 'w') as output_file:
+#         for training_id in training_ids:
+#             output_file.write("%s\n" % training_id)
 
     # Save testing ids
-    with open(OUTPUT_BASE_PATH + '/testing_ids.txt', 'w') as output_file:
-        for testing_id in testing_ids:
-            output_file.write("%s\n" % testing_id)
+#     with open(OUTPUT_BASE_PATH + '/testing_ids.txt', 'w') as output_file:
+#         for testing_id in testing_ids:
+#             output_file.write("%s\n" % testing_id)
 
-    print('No. of excluded samples: ' + str(excluded_samples_count))
+    #print('No. of excluded samples: ' + str(excluded_samples_count))
     print('Finished')
 
 

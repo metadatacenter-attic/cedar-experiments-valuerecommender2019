@@ -9,6 +9,7 @@ import sys
 import term_normalizer
 import bioportal_util
 import annotation_constants
+import argparse
 
 # INPUT
 UNIQUE_VALUES_FILE_PATH = annotation_constants.VALUES_ANNOTATION_INPUT_VALUES_FILE_PATH
@@ -20,7 +21,6 @@ MAPPINGS_FILE_PATH_1 = annotation_constants.VALUES_ANNOTATION_MAPPINGS_FILE_PATH
 MAPPINGS_FILE_PATH_2 = annotation_constants.VALUES_ANNOTATION_MAPPINGS_FILE_PATH_2
 
 # OTHER SETTINGS
-BIOPORTAL_API_KEY = annotation_constants.VALUES_ANNOTATION_BIOPORTAL_API_KEY
 VALUES_PER_ITERATION = annotation_constants.VALUES_ANNOTATION_VALUES_PER_ITERATION
 # List of relevant ontologies. The algorithm will try to pick pref_class_label and pref_class_uri from one of these
 # ontologies. If that's not possible, it will pick values from any other ontologies
@@ -159,6 +159,19 @@ def generate_mappings(unique_values_annotated):
 
 
 def main():
+    
+    parser = argparse.ArgumentParser()
+    
+    parser.add_argument("--bioportal-api-key",
+                        dest='bp_api_key',
+                        required=True,
+                        nargs=1,
+                        metavar=("BIOPORTAL_API_KEY"),
+                        help="Your BioPortal API key")
+    
+    args = parser.parse_args()
+    bp_api_key = args.bp_api_key[0]
+    
     # Read unique values
     with open(UNIQUE_VALUES_FILE_PATH) as f:
         all_values = f.read().splitlines()
@@ -209,7 +222,7 @@ def main():
         if LIMIT_ANNOTATOR_TO_PREFERRED_ONTOLOGIES:
             ontologies = PREFERRED_ONTOLOGIES_1
 
-        annotations = bioportal_util.annotate(BIOPORTAL_API_KEY, ",".join(keywords_list), ontologies, longest_only=True,
+        annotations = bioportal_util.annotate(bp_api_key, ",".join(keywords_list), ontologies, longest_only=True,
                                               expand_mappings=True, include=['prefLabel'])
 
         # Extract annotations using PREFERRED_ONTOLOGIES_1
