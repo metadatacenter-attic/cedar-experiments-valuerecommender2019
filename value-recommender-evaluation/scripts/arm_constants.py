@@ -27,14 +27,16 @@ EBI_DOWNLOAD_OUTPUT_FOLDER = OUTPUT_BASE_PATH + "/samples/ebi_samples/original"
 ##################
 
 # Input parameters for 'ncbi_biosamples_2_filter.py'
-NCBI_FILTER_INPUT_FILE = DATA_BASE_PATH + '/samples/ncbi_samples/original/2018-03-09-biosample_set.xml.gz'
+NCBI_FILTER_INPUT_FILE = OUTPUT_BASE_PATH + '/samples/ncbi_samples/original/biosample_set.xml.gz'
 NCBI_FILTER_OUTPUT_FILE = OUTPUT_BASE_PATH + '/samples/ncbi_samples/filtered/biosample_result_filtered.xml'
+NCBI_FILTER_OUTPUT_FILE_PRECOMPUTED = DATA_BASE_PATH + '/samples/ncbi_samples/filtered/biosample_result_filtered.xml'
 NCBI_FILTER_RELEVANT_ATTS = ['sex', 'tissue', 'disease', 'cell_type', 'cell type', 'cell_line', 'cell line', 'ethnicity']
 NCBI_FILTER_MIN_RELEVANT_ATTS = 3
 
 # Input parameters for 'ebi_biosamples_2_filter.py'
-EBI_FILTER_INPUT_FOLDER = DATA_BASE_PATH + '/samples/ebi_samples/original'
+EBI_FILTER_INPUT_FOLDER = OUTPUT_BASE_PATH + '/samples/ebi_samples/original'
 EBI_FILTER_OUTPUT_FOLDER = OUTPUT_BASE_PATH + '/samples/ebi_samples/filtered'
+EBI_FILTER_OUTPUT_FOLDER_PRECOMPUTED = DATA_BASE_PATH + '/samples/ebi_samples/filtered'
 EBI_FILTER_MAX_SAMPLES_PER_FILE = 10000
 EBI_FILTER_RELEVANT_ATTS = ['sex', 'organismPart', 'cellLine', 'cellType', 'diseaseState', 'ethnicity']
 EBI_FILTER_MIN_RELEVANT_ATTS = 3
