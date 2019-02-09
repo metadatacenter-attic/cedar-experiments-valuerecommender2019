@@ -19,7 +19,8 @@ OUTPUT_SUFFIX = annotation_constants.INSTANCES_ANNOTATION_OUTPUT_SUFFIX
 NON_ANNOTATED_VALUES_REPORT_FILE_NAME = annotation_constants.INSTANCES_ANNOTATION_NON_ANNOTATED_VALUES_FILE_NAME
 
 # OTHER CONSTANTS
-UNIQUE_VALUES_ANNOTATED_FILE_PATH = annotation_constants.INSTANCES_ANNOTATION_VALUES_ANNOTATED_FILE_PATH
+UNIQUE_VALUES_ANNOTATED_FILE_PATH_1 = annotation_constants.INSTANCES_ANNOTATION_VALUES_ANNOTATED_FILE_PATH_1
+UNIQUE_VALUES_ANNOTATED_FILE_PATH_2 = annotation_constants.INSTANCES_ANNOTATION_VALUES_ANNOTATED_FILE_PATH_2
 # The following two reference instances are using to extract the @type (instance types)
 EBI_EMPTY_INSTANCE_ANNOTATED_PATH = annotation_constants.INSTANCES_ANNOTATION_EBI_EMPTY_INSTANCE_ANNOTATED_PATH
 NCBI_EMPTY_INSTANCE_ANNOTATED_PATH = annotation_constants.INSTANCES_ANNOTATION_NCBI_EMPTY_INSTANCE_ANNOTATED_PATH
@@ -84,7 +85,8 @@ def annotate_instance(instance_json, unique_values_annotated, normalized_values,
 
 
 def main():
-    annotations = json.load(open(UNIQUE_VALUES_ANNOTATED_FILE_PATH))
+    annotations1 = json.load(open(UNIQUE_VALUES_ANNOTATED_FILE_PATH_1))
+    annotations2 = json.load(open(UNIQUE_VALUES_ANNOTATED_FILE_PATH_2))
 
     normalized_values = {}
     if USE_NORMALIZED_VALUES:
@@ -96,8 +98,16 @@ def main():
     count = 0
 
     for input_instances_path in INPUT_FOLDERS:
-        output_path = OUTPUT_BASE_PATH + input_instances_path.replace(INPUT_BASE_PATH, '')
+        
         print('Processing instances folder: ' + input_instances_path)
+        if 'ncbi' in input_instances_path:
+            annotations = annotations1
+            #print('Annotations file used: ' + UNIQUE_VALUES_ANNOTATED_FILE_PATH_1)
+        else:
+            annotations = annotations2
+            #print('Annotations file used: ' + UNIQUE_VALUES_ANNOTATED_FILE_PATH_2)
+        output_path = OUTPUT_BASE_PATH + input_instances_path.replace(INPUT_BASE_PATH, '')
+        
         for root, dirs, files in os.walk(input_instances_path):
             for file in files:
                 if '.json' in file:  # basic check that we are processing the right file
@@ -123,7 +133,7 @@ def main():
                         json.dump(annotated_instance, outfile)
 
                     count = count + 1
-                    if count % 100 == 0:
+                    if count % 10000 == 0:
                         print("No. annotated instances: " + str(count))
 
         print()
