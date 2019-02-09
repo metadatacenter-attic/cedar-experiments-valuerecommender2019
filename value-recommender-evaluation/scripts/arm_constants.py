@@ -9,7 +9,7 @@ class BIOSAMPLES_DB(Enum):
 
 BASE_PATH = "./"
 DATA_BASE_PATH = BASE_PATH + "data"
-OUTPUT_BASE_PATH = BASE_PATH + "workspace"
+OUTPUT_BASE_PATH = BASE_PATH + "workspace/data"
 
 ####################
 # DOWNLOAD SAMPLES #
@@ -17,7 +17,7 @@ OUTPUT_BASE_PATH = BASE_PATH + "workspace"
 
 # Input parameters for 'ebi_biosamples_1_download_split.py'
 EBI_DOWNLOAD_URL = 'https://www.ebi.ac.uk/biosamples/api/samples'
-EBI_DOWNLOAD_MAX_SIZE_PER_PAGE = 1000
+EBI_DOWNLOAD_MAX_SIZE_PER_PAGE = 10000
 EBI_DOWNLOAD_PAGES_PER_FILE = 1
 EBI_DOWNLOAD_MAX_PAGES = -1
 EBI_DOWNLOAD_OUTPUT_FOLDER = OUTPUT_BASE_PATH + "/samples/ebi_samples/original"

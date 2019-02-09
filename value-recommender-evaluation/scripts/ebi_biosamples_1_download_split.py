@@ -47,7 +47,7 @@ def get_all_biosamples(max_pages=MAX_PAGES, pages_per_file=PAGES_PER_FILE):
 
     if not os.path.exists(EBI_BIOSAMPLES_OUTPUT_FOLDER):
         os.makedirs(EBI_BIOSAMPLES_OUTPUT_FOLDER)
-
+    print('Downloading EBI samples to: ' + EBI_BIOSAMPLES_OUTPUT_FOLDER)
     while current_page < total_pages:
         response = get_biosamples(current_page)
         print(response.url)
