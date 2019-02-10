@@ -79,30 +79,24 @@ EVALUATION_TRAINING_DB = BIOSAMPLES_DB.NCBI
 EVALUATION_TESTING_DB = BIOSAMPLES_DB.NCBI
 EVALUATION_USE_ANNOTATED_VALUES = True
 EVALUATION_EXTEND_URIS_WITH_MAPPINGS = True
-EVALUATION_MAPPINGS_FILE_PATH = BASE_PATH + '/cedar_instances_annotated/unique_values/mappings_merged.json'
-EVALUATION_MAX_NUMBER_INSTANCES = 20000
-EVALUATION_CEDAR_API_KEY = ''
+EVALUATION_MAPPINGS_FILE_PATH = OUTPUT_BASE_PATH + '/cedar_instances_annotated/unique_values/mappings_merged.json'
+EVALUATION_MAX_NUMBER_INSTANCES = 200000
 
-# EVALUATION_TESTING_INSTANCES_BASE_FOLDERS = {
-#     "NCBI": BASE_PATH + '/cedar_instances/ncbi_cedar_instances/testing',
-#     "EBI": BASE_PATH + '/cedar_instances/ebi_cedar_instances/testing'
-# }
-
-# EVALUATION_TESTING_INSTANCES_ANNOTATED_BASE_FOLDERS = {
-#     "NCBI": BASE_PATH + '/cedar_instances_annotated/ncbi_cedar_instances/testing',
-#     "EBI": BASE_PATH + '/cedar_instances_annotated/ebi_cedar_instances/testing'
-# }
-
-EVALUATION_TESTING_INSTANCES_ANNOTATED_BASE_FOLDERS = {
-    "NCBI": BASE_PATH + '/cedar_instances_annotated/ncbi_cedar_instances/testing',
-    "EBI": BASE_PATH + '/cedar_instances_annotated/ebi_cedar_instances_different_ontologies/testing'
+EVALUATION_TESTING_INSTANCES_BASE_FOLDERS = {
+    "NCBI": OUTPUT_BASE_PATH + '/cedar_instances/ncbi_cedar_instances/testing',
+    "EBI": OUTPUT_BASE_PATH + '/cedar_instances/ebi_cedar_instances/testing'
 }
 
-EVALUATION_NCBI_MOST_FREQUENT_VALUES_PATH = BASE_PATH + '/most_frequent_values/ncbi_frequent_values.json'
-EVALUATION_EBI_MOST_FREQUENT_VALUES_PATH = BASE_PATH + '/most_frequent_values/ebi_frequent_values.json'
-EVALUATION_NCBI_MOST_FREQUENT_VALUES_ANNOTATED_PATH = BASE_PATH + '/most_frequent_values/ncbi_annotated_frequent_values.json'
-#EVALUATION_EBI_MOST_FREQUENT_VALUES_ANNOTATED_PATH = BASE_PATH + '/most_frequent_values/ebi_annotated_frequent_values.json'
-EVALUATION_EBI_MOST_FREQUENT_VALUES_ANNOTATED_PATH = BASE_PATH + '/most_frequent_values/ebi_annotated_diff_onts_frequent_values.json'
+EVALUATION_TESTING_INSTANCES_ANNOTATED_BASE_FOLDERS = {
+    "NCBI": OUTPUT_BASE_PATH + '/cedar_instances_annotated/ncbi_cedar_instances/testing',
+    "EBI": OUTPUT_BASE_PATH + '/cedar_instances_annotated/ebi_cedar_instances/testing'
+}
+
+EVALUATION_NCBI_MOST_FREQUENT_VALUES_PATH = DATA_BASE_PATH + '/most_frequent_values/ncbi_frequent_values.json'
+EVALUATION_EBI_MOST_FREQUENT_VALUES_PATH = DATA_BASE_PATH + '/most_frequent_values/ebi_frequent_values.json'
+EVALUATION_NCBI_MOST_FREQUENT_VALUES_ANNOTATED_PATH = DATA_BASE_PATH + '/most_frequent_values/ncbi_annotated_frequent_values.json'
+EVALUATION_EBI_MOST_FREQUENT_VALUES_ANNOTATED_PATH = DATA_BASE_PATH + '/most_frequent_values/ebi_annotated_frequent_values.json'
+EVALUATION_EBI_MOST_FREQUENT_VALUES_ANNOTATED_PATH = DATA_BASE_PATH + '/most_frequent_values/ebi_annotated_diff_onts_frequent_values.json'
 
 EVALUATION_READ_TEST_INSTANCES_FROM_CEDAR = False  # If false, the instances are read from a local folder
 EVALUATION_VR_SERVER = 'https://valuerecommender.metadatacenter.orgx/'
@@ -112,7 +106,7 @@ EVALUATION_NCBI_TEMPLATE_ID = 'https://repo.metadatacenter.orgx/templates/eef6f3
 EVALUATION_EBI_TEMPLATE_ID = 'https://repo.metadatacenter.orgx/templates/80766e2b-0629-49f2-ba77-224a88739ad7' # diff onts
 
 EVALUATION_UNIQUE_VALUES_ANNOTATED_FILE_PATH = BASE_PATH + '/cedar_instances_annotated/unique_values/unique_values_annotated.json'
-EVALUATION_OUTPUT_RESULTS_PATH = BASE_PATH + '/results'
+EVALUATION_OUTPUT_RESULTS_PATH = OUTPUT_BASE_PATH + '/results'
 
 EVALUATION_NCBI_FIELD_DETAILS = {'sex': {'path': 'sex', 'json_path': '$.sex'},
                       'tissue': {'path': 'tissue', 'json_path': '$.tissue'},
