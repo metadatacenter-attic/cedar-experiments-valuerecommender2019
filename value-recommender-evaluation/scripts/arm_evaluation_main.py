@@ -71,7 +71,6 @@ def get_mapped_populated_fields(field_details, fields_types_and_values, target_f
     populated_fields = []
     for f in fields_types_and_values:
         if f != target_field:
-            print(fields_types_and_values[f])
             if fields_types_and_values[f]['value'] is not None:
                 if fields_types_and_values[f]['type'] is not None:  # ontology term
                     path = fields_types_and_values[f]['type']

@@ -96,7 +96,13 @@ def get_recommended_values(recommendation_results, max_size):
     recommended_values = []
     if 'recommendedValues' in recommendation_results:
         for rv in recommendation_results['recommendedValues']:
-            recommended_values.append(rv['value'])
+            if 'valueType' in rv:
+                recommended_values.append(rv['valueType'])
+            elif 'valueLabel' in rv:
+                recommended_values.append(rv['valueLabel'])
+            else:
+                sys.exit('value not found')
+              
     else:
         print('Error: recommendedValues not found in recommendation_results')
     result = recommended_values[:max_size]
@@ -156,7 +162,7 @@ def populated_fields_to_string(populated_fields):
         return 'NA'
     field_value_pairs = []
     for pf in populated_fields:
-        field_value_pairs.append(pf['path'] + '=' + pf['value'])
+        field_value_pairs.append(pf['fieldPath'] + '=' + pf['fieldValueLabel'] + '(' + pf['fieldValueType'] + ')')
     return "|".join(field_value_pairs)
 
 
