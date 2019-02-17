@@ -1,5 +1,6 @@
 # Evaluation utils
 
+import sys
 import json
 import string
 import urllib.parse
@@ -37,16 +38,19 @@ def get_instance_fields_types_and_values(instance, field_details):
         jsonpath_expr = parse(field_details[field]['json_path'])
         matches = jsonpath_expr.find(instance)
         field_values[field] = {}
-        field_values[field]['value'] = None
-        field_values[field]['type'] = None
+        field_values[field]['fieldType'] = None
+        field_values[field]['fieldValueLabel'] = None
+        field_values[field]['fieldValueType'] = None
         if matches[0] is not None and matches[0].value is not None:
             if '@value' in matches[0].value and matches[0].value['@value'] is not None:
-                field_values[field]['value'] = matches[0].value['@value']
-            elif '@id' in matches[0].value and matches[0].value['@id'] is not None:
-                field_values[field]['value'] = matches[0].value['@id']
+                field_values[field]['fieldValueLabel'] = matches[0].value['@value']
+            elif 'rdfs:label' in matches[0].value and matches[0].value['rdfs:label'] is not None:
+                field_values[field]['fieldValueLabel'] = matches[0].value['rdfs:label']
+            if '@id' in matches[0].value and matches[0].value['@id'] is not None:
+                field_values[field]['fieldValueType'] = matches[0].value['@id']
             if '@type' in matches[0].value and matches[0].value['@type'] is not None:
                 field_type = matches[0].value['@type']
-                field_values[field]['type'] = get_original_term_uri(field_type)
+                field_values[field]['fieldType'] = get_original_term_uri(field_type)
 
     return field_values
 
@@ -90,13 +94,26 @@ def all_filled_out(field_values):
     return True
 
 
-def get_recommended_values(recommendation_results, max_size):
+# Extracts the right value from a 'fields_types_and_values' object
+def get_field_value(fields_types_and_values, field_name):
+    if field_name in fields_types_and_values:
+        if 'fieldValueType' in fields_types_and_values[field_name] and fields_types_and_values[field_name]['fieldValueType'] is not None:
+            return fields_types_and_values[field_name]['fieldValueType']
+        elif 'fieldValueLabel' in fields_types_and_values[field_name] and fields_types_and_values[field_name]['fieldValueLabel'] is not None:
+            return fields_types_and_values[field_name]['fieldValueLabel']
+        else:
+            sys.exit('field value not found')
+    else:
+        sys.exit('field name not found')
+
+
+def get_recommended_values(recommendation_results, max_size, annotated):
     if max_size <= 0:
         raise ValueError("max_size must be > 0")
     recommended_values = []
     if 'recommendedValues' in recommendation_results:
         for rv in recommendation_results['recommendedValues']:
-            if 'valueType' in rv:
+            if 'valueType' in rv and rv['valueType'] is not None and annotated:
                 recommended_values.append(rv['valueType'])
             elif 'valueLabel' in rv:
                 recommended_values.append(rv['valueLabel'])
@@ -126,7 +143,8 @@ def is_same_concept(term_uri1, term_uri2, mappings):
     """
     if term_uri1 == term_uri2:
         return True
-    elif term_uri1 in mappings[term_uri2] or term_uri2 in mappings[term_uri1]:
+    elif (term_uri2 in mappings and term_uri1 in mappings[term_uri2]) \
+            or (term_uri1 in mappings and term_uri2 in mappings[term_uri1]):
         #print('Found two uris for the same concept: ' + term_uri1 + ' = ' + term_uri2)
         return True
     else:
@@ -162,8 +180,12 @@ def populated_fields_to_string(populated_fields):
         return 'NA'
     field_value_pairs = []
     for pf in populated_fields:
-        field_value_pairs.append(pf['fieldPath'] + '=' + pf['fieldValueLabel'] + '(' + pf['fieldValueType'] + ')')
-    return "|".join(field_value_pairs)
+        field_value_type = ''
+        if 'fieldValueType' in pf and pf['fieldValueType'] is not None:
+            field_value_type = '[' + pf['fieldValueType'] + ']'
+        field_value_pairs.append(pf['fieldPath'] + '=' + field_value_type + pf['fieldValueLabel'])
+    result = " | ".join(field_value_pairs)
+    return result
 
 
 def position_of_expected_value(expected_value, values, mappings, extend_with_mappings=False):

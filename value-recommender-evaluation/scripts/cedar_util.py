@@ -61,18 +61,6 @@ def get_template_instances_ids(server, template_id, max_count, limit_per_call, a
     return ids
 
 
-#
-#
-# def get_template_instance_by_id(server, template_instance_id, api_key):
-#     url = server + "template-instances/" + urllib.parse.quote(template_instance_id, safe='')
-#     headers = {
-#          'content-type': "application/json",
-#          'authorization': "apiKey " + api_key
-#     }
-#     response = requests.request("GET", url, headers=headers, verify=False)
-#     return json.loads(response.text)
-#
-#
 def get_value_recommendation(server, template_id, target_field_path, populated_fields, api_key, strict_match=False):
     url = server + "command/recommend"
 
@@ -85,10 +73,10 @@ def get_value_recommendation(server, template_id, target_field_path, populated_f
 
     else:  # template_id is None
         if populated_fields is not None:
-            payload = {'targetField': {'path': target_field_path},
+            payload = {'targetField': {'fieldPath': target_field_path},
                        'populatedFields': populated_fields}
         else:
-            payload = {'targetField': {'path': target_field_path}}
+            payload = {'targetField': {'fieldPath': target_field_path}}
 
     payload['strictMatch'] = strict_match
 
@@ -97,12 +85,10 @@ def get_value_recommendation(server, template_id, target_field_path, populated_f
         'authorization': "apiKey " + api_key
     }
 
+    #print(payload)
     recommendation_response = requests.post(url, json=payload, headers=headers, verify=False)
-    print('------------')
-    print(payload)
-    print('------------')
-    print(recommendation_response.url)
-    print(recommendation_response.text)
+    # print(recommendation_response.url)
+    # print(recommendation_response.text)
     return json.loads(recommendation_response.text)
 
 

@@ -7,6 +7,7 @@ import itertools
 import json
 import os
 import time
+import sys
 
 import arm_constants
 import arm_evaluation_util
@@ -36,6 +37,8 @@ EBI_TO_NCBI_MAPPINGS = arm_constants.EVALUATION_EBI_TO_NCBI_MAPPINGS
 NCBI_TO_EBI_MAPPINGS = arm_constants.EVALUATION_NCBI_TO_EBI_MAPPINGS
 STANDARD_FIELD_NAMES_FOR_PLOTS = arm_constants.EVALUATION_STANDARD_FIELD_NAMES_FOR_PLOTS
 
+if MAX_NUMBER_INSTANCES is None:
+    MAX_NUMBER_INSTANCES = sys.maxsize
 
 def get_mapped_field_path(field_name, training_db=TRAINING_DB, testing_db=TESTING_DB,
                           ebi_to_ncbi_mappings=EBI_TO_NCBI_MAPPINGS,
@@ -71,15 +74,17 @@ def get_mapped_populated_fields(field_details, fields_types_and_values, target_f
     populated_fields = []
     for f in fields_types_and_values:
         if f != target_field:
-            if fields_types_and_values[f]['value'] is not None:
-                if fields_types_and_values[f]['type'] is not None:  # ontology term
-                    path = fields_types_and_values[f]['type']
-                    populated_fields.append({'fieldPath': path, 'fieldValueLabel': '', 'fieldValueType': fields_types_and_values[f]['value']})
-                else:
+            if fields_types_and_values[f]['fieldValueLabel'] is not None:
+                if fields_types_and_values[f]['fieldType'] is not None:  # ontology term
+                    populated_fields.append({'fieldPath': fields_types_and_values[f]['fieldType'],
+                                             'fieldValueLabel': fields_types_and_values[f]['fieldValueLabel'],
+                                             'fieldValueType': fields_types_and_values[f]['fieldValueType']})
+                else:  # plain text
                     mapped_field_path = get_mapped_field_path(field_details[f]['path'])
                     if mapped_field_path is None:
                         return None
-                    populated_fields.append({'fieldPath': mapped_field_path, 'fieldValueLabel': fields_types_and_values[f]['value']})
+                    populated_fields.append({'fieldPath': mapped_field_path,
+                                             'fieldValueLabel': fields_types_and_values[f]['fieldValueLabel']})
     return populated_fields
 
 
@@ -90,7 +95,6 @@ def get_baseline_top10_recommendation(field_name,
                                       ebi_frequent_values_annotated,
                                       training_db=TRAINING_DB, testing_db=TESTING_DB,
                                       annotated_values=ANNOTATED_VALUES):
-
     if not annotated_values:
         ncbi_fv = ncbi_frequent_values
         ebi_fv = ebi_frequent_values
@@ -138,19 +142,18 @@ def generate_populated_fields_sets(populated_fields, include_empty_list=True):
 
 
 def main():
-    
     parser = argparse.ArgumentParser()
-    
+
     parser.add_argument("--cedar-api-key",
                         dest='cedar_api_key',
                         required=True,
                         nargs=1,
                         metavar=("CEDAR_API_KEY"),
                         help="Your CEDAR API key")
-    
+
     args = parser.parse_args()
     cedar_api_key = args.cedar_api_key[0]
-    
+
     # Read frequent values files, used for baseline recommendations
     ncbi_frequent_values = json.load(open(arm_constants.EVALUATION_NCBI_MOST_FREQUENT_VALUES_PATH))
     ebi_frequent_values = json.load(open(arm_constants.EVALUATION_EBI_MOST_FREQUENT_VALUES_PATH))
@@ -202,6 +205,12 @@ def main():
     else:
         template_id = None
 
+    print('Training DB: ' + str(TRAINING_DB))
+    print('Testing DB: ' + str(TESTING_DB))
+    print('template_id has been set to: ' + str(template_id))
+    if MAX_NUMBER_INSTANCES < sys.maxsize:
+        print('Max. no. test instances to be processed: ' + str(MAX_NUMBER_INSTANCES))
+
     test_instances_base_folder = arm_evaluation_util.get_test_instances_folder(TESTING_DB, ANNOTATED_VALUES)
 
     if READ_TEST_INSTANCES_FROM_CEDAR:
@@ -223,11 +232,11 @@ def main():
                     fields_types_and_values = arm_evaluation_util.get_instance_fields_types_and_values(instance_json,
                                                                                                        field_details)
                     for field_name in fields_types_and_values:
-                        if fields_types_and_values[field_name]['value'] is not None:  # if the field is not empty
+                        if fields_types_and_values[field_name]['fieldValueLabel'] is not None:  # if the field is not empty
 
                             field_name_full = field_name
-                            if fields_types_and_values[field_name]['type'] is not None:  # ontology term
-                                field_path = fields_types_and_values[field_name]['type']
+                            if fields_types_and_values[field_name]['fieldType'] is not None:  # ontology term
+                                field_path = fields_types_and_values[field_name]['fieldType']
                                 field_name_full = "[" + field_path + "](" + field_name + ")"
                             else:
                                 field_path = get_mapped_field_path(field_name)
@@ -263,33 +272,45 @@ def main():
                                     execution_time_vr = int(round((time.time() - start_time_vr) * 1000))
 
                                     recommended_top1_value_vr = arm_evaluation_util.get_recommended_values(
-                                        recommendation_vr, 1)
+                                        recommendation_vr, 1, ANNOTATED_VALUES)
+
+                                    # check if there are cases with no recommended values. It might be a bug
+                                    # if len(recommended_top1_value_vr) == 0:
+                                    #     print('************')
+                                    #     print(field_path)
+                                    #     print(populated_fields)
+                                    #     print('Recommended: ' + str(recommended_top1_value_vr))
 
                                     baseline_top_10 = get_baseline_top10_recommendation(field_name,
-                                                                                                        ncbi_frequent_values,
-                                                                                                        ebi_frequent_values,
-                                                                                                        ncbi_annotated_frequent_values,
-                                                                                                        ebi_annotated_frequent_values)
+                                                                                        ncbi_frequent_values,
+                                                                                        ebi_frequent_values,
+                                                                                        ncbi_annotated_frequent_values,
+                                                                                        ebi_annotated_frequent_values)
                                     if baseline_top_10 is not None and len(baseline_top_10) > 0:
                                         recommended_top1_value_baseline = baseline_top_10[0]
                                     else:
                                         recommended_top1_value_baseline = 'NA'
 
+                                    expected_value = arm_evaluation_util.get_field_value(fields_types_and_values, field_name)
+                                    recommended_value = arm_evaluation_util.get_recommended_values_as_string(recommended_top1_value_vr)
+                                    # print('Field path: ' + field_path)
+                                    # print('Expected: ' + expected_value)
+                                    # print('Recommended: ' + recommended_value)
 
-                                    is_correct_vr = arm_evaluation_util.get_matching_score(
-                                        fields_types_and_values[field_name]['value'],
-                                        arm_evaluation_util.get_recommended_values_as_string(recommended_top1_value_vr),
+                                    is_correct_vr = arm_evaluation_util.get_matching_score(expected_value, recommended_value,
                                         mappings,
                                         extend_with_mappings=actually_extend_with_mappings)
 
+                                    #print(is_correct_vr)
+
                                     is_correct_baseline = arm_evaluation_util.get_matching_score(
-                                        fields_types_and_values[field_name]['value'],
+                                        expected_value,
                                         recommended_top1_value_baseline,
                                         mappings,
                                         extend_with_mappings=actually_extend_with_mappings)
 
                                     recommended_top10_values_vr = arm_evaluation_util.get_recommended_values(
-                                        recommendation_vr, 10)
+                                        recommendation_vr, 10, ANNOTATED_VALUES)
 
                                     recommended_top10_values_baseline = get_baseline_top10_recommendation(field_name,
                                                                                                           ncbi_frequent_values,
@@ -297,7 +318,7 @@ def main():
                                                                                                           ncbi_annotated_frequent_values,
                                                                                                           ebi_annotated_frequent_values)
 
-                                    expected_value = fields_types_and_values[field_name]['value']
+
 
                                     position_of_expected_value_vr = arm_evaluation_util.position_of_expected_value(
                                         expected_value, recommended_top10_values_vr, mappings,
