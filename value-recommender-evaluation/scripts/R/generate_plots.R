@@ -6,7 +6,7 @@ library(ggpubr)
 library("RColorBrewer")
 
 ### CONSTANTS ###
-workspace = "../../data/results/"
+workspace = "../../../data/results/main_experiment"
 color1 <- "#fdb863" # light orange
 color2 <- "#e66101" # dark orange
 color3 <- "#b2abd2" # light violet
