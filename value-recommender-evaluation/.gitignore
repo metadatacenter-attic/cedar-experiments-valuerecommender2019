@@ -9,6 +9,6 @@ __pycache__/
 */.ipynb_checkpoints/*
 
 ### Custom ###
-output/
+data/
 workspace/
 .idea
