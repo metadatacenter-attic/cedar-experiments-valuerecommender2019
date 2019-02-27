@@ -10,5 +10,7 @@ __pycache__/
 
 ### Custom ###
 data/
+data.zip
 workspace/
 .idea
+__MACOSX/
